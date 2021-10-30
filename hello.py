@@ -1,18 +1,21 @@
 import os
 import sys
 import threading
-import nmap
+#import nmap
 help="""---------------- HOST SCAN ---------------
-	python get_hosts.py [options]
+	python hello.py [options]
 	options -s startip
 	options -e endip
-	EX . python get_hosts.py -s 10.1.1.0 -e 10.1.1.225
+	EX . python hello.py -s 10.1.1.0 -e 10.1.1.225
 	"""
 
 if len(sys.argv)!=5:
 	print(help)
-	sys.exit(0
+	sys.exit(0)
+
 IpList = []
+
+
 def ping(ip):
     
     #x = 0
@@ -51,6 +54,6 @@ while startip != endip:
         else:
             startip[2]+=1
 
-def nmap(ip:str):
-    "yes" = "yes"
+#def nmap(ip:str):
+#    "yes" = "yes"
 #print(IpList)
