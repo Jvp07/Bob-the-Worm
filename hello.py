@@ -4,6 +4,7 @@ import threading
 import nmap
 import subprocess
 import paramiko
+import main
 #help="""---------------- HOST SCAN ---------------
 #	python hello.py [options]
 #	options -s startip
@@ -33,8 +34,16 @@ def nmaper():
         print(f'port {portnum} is {portscan}.')
     #once all open ports have been found
         if portscan == 'open':
-            subprocess.run(["ssh", "msfadmin@"+ips])
+            yes = "yes"
+        #    subprocess.run(["ssh", "msfadmin@"+ips])\
+    command = 'ls'
+    client = paramiko.SSHClient()
+    client.connect('192.168.56.103', username='msfadmin', password='msfadmin')
+    (stdin, stdout, stderr) = client.exec_command(command)
+    lines = stdout.readlines()
+    print(lines)
 
+    client.close()
 
 
 
@@ -50,8 +59,8 @@ def ping(ip):
         #print(IpList)
     os.system('del '+ip)
 #print(IpList)
-startip=list(map(int,sys.argv[sys.argv.index('-s')+1].strip().split('.')))
-endip=list(map(int,sys.argv[sys.argv.index('-e')+1].strip().split('.')))
+#startip=list(map(int,sys.argv[sys.argv.index('-s')+1].strip().split('.')))
+#endip=list(map(int,sys.argv[sys.argv.index('-e')+1].strip().split('.')))
 
 #print(IpList)
 def scanner():  
