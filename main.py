@@ -1,6 +1,4 @@
-import sys
 import hello
-import time
 
 def main():
     hello.ping()

