@@ -1,8 +1,8 @@
-import hello
+import Guts
 
 def main():
-    hello.ping()
-    hello.nmaper()
-    hello.bruteforce()
+    Guts.ping()
+    Guts.nmaper()
+    Guts.bruteforce()
 if __name__ == "__main__":
   main()
