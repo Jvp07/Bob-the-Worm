@@ -25,5 +25,5 @@ python3 main.py
 This program requires a local cache of IP's to be built prior to succesfully running. You may need to run this once or twice before it can succesfully run. 
 
 #### Authors:
-Jose Vega\n
+Jose Vega  
 Sheena Talosig
