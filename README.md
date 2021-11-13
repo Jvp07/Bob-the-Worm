@@ -23,3 +23,7 @@ python3 main.py
 
 ### Note when running the program:
 This program requires a local cache of IP's to be built prior to succesfully running. You may need to run this once or twice before it can succesfully run. 
+
+#### Authors:
+Jose Vega
+Sheena Talosig
